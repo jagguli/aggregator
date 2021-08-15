@@ -25,7 +25,7 @@ class MongoSearchViewset(ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         results = {}
         self.limit = int(self.request.query_params.get("limit", 10))
-        self.offset = self.request.query_params.get("offset") or 0
+        self.offset = int(self.request.query_params.get("offset") or 0)
         queryset = self.get_queryset()
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(context=dict(request=request))

@@ -3,7 +3,6 @@ from src.scraper.tasks import crawl, DefaultCrawlSpider as Spider
 import requests
 import pytest
 from scrapy.http import HtmlResponse
-import ipdb
 
 
 @pytest.mark.vcr()
@@ -13,11 +12,8 @@ def test_parse_theconversation():
     scrapy_response = HtmlResponse(url, body=response.content)
 
     spider = Spider("theconversation_au")
-    results = spider.parse(scrapy_response)
-    for result in results:
-        print(results)
-    ipdb.set_trace()  ######## FIXME:REMOVE ME steven.joseph ################
-    assert result == target
+    results = spider.parse_article(scrapy_response)
+    assert len([x for x in results]) > 0
 
 
 def test_crawl(caplog):
@@ -31,9 +27,6 @@ def test_crawl(caplog):
         After crawler completes, this function will execute.
         Do your assertions in this function.
         """
-        import ipdb
-
-        ipdb.set_trace()  ######## FIXME:REMOVE ME steven.joseph ################
 
     @deferred.addErrback
     def _error(failure):
