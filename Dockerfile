@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.9
 
 ARG REQUIREMENTS_FILE
 
@@ -16,9 +16,15 @@ RUN set -x && \
 
 CMD ["sh", "/entrypoint-web.sh"]
 COPY ./docker/ /
+RUN pip install -U poetry
+# Copy only requirements to cache them in docker layer
+COPY poetry.lock pyproject.toml ./
 
-COPY ./requirements/ ./requirements
-RUN pip install -r ./requirements/${REQUIREMENTS_FILE}
+# Project initialization:
+RUN poetry config virtualenvs.create false \
+    && poetry install \
+    --no-interaction \
+    --no-ansi
 
 COPY . ./
 
