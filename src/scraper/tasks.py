@@ -40,11 +40,11 @@ class SingletonTask(Task):
         lock = cache.lock(self.name)
 
         if not lock.acquire(blocking=False):
-            logging.info("{} failed to lock".format(self.name))
+            logging.info("%s failed to lock", self.name)
             return
 
         try:
-            super(SingletonTask, self).__call__(*args, **kwargs)
+            super().__call__(*args, **kwargs)
         except Exception as e:
             lock.release()
             raise e
